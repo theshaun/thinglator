@@ -50,18 +50,15 @@ var utils = {
 			resolve(true);
 		});
 	},
-	loadDrivers: function() {
+	loadDrivers: function(comms) {
 		var driversArr = [];
 		fs.readdirSync('./node_modules').forEach(function(file) {
 			if (file.match(/thinglator-driver-/) !== null) {
 				var name = file.replace('thinglator-driver-', '');
 				var Driver = require('thinglator-driver-' + name);
 
-				var interfaces = {
-					http: {}
-				};
 
-				driversArr[name] = new Driver(new DriverSettings(name), interfaces);
+				driversArr[name] = new Driver(new DriverSettings(name), comms);
 				driversArr[name].setEventEmitter(models[driversArr[name].getType()].DeviceEventEmitter);
 
 				//get a list of devices for this particular driver
